@@ -511,4 +511,5 @@
     <string name="admin_request_action_failed">Die Anfrage konnte nicht aktualisiert werden.</string>
     <string name="mediarium_api_key">Mediarium-API-Schlüssel</string>
     <string name="connect_mediarium">Mediarium verbinden</string>
+    <string name="request_provider">Anfragen</string>
 </resources>

@@ -82,6 +82,7 @@ internal fun MediariumRequestDto.toSummary(): JellyseerrRequestSummary =
         posterPath = poster,
         backdropPath = null,
         canManageAtProvider = false,
+        provider = RequestProviderType.MEDIARIUM,
     )
 
 /** Being in Mediarium prevents duplicate adds; only Jellyfin can confirm playback availability. */

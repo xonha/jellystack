@@ -127,6 +127,7 @@ data class JellyseerrRequestSummary(
     val posterPath: String?,
     val backdropPath: String?,
     val canManageAtProvider: Boolean = true,
+    val provider: RequestProviderType = RequestProviderType.SEERR,
 )
 
 data class JellyseerrRequestCounts(

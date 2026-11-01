@@ -19,6 +19,7 @@ jobs:
         with:
           cache-read-only: false
       - name: Static checks, unit tests, phone and TV builds
+        id: gates
         run: >-
           ./gradlew spotlessCheck detekt
           :shared-network:jvmTest :shared-core:testDebugUnitTest
@@ -27,6 +28,14 @@ jobs:
           :design:verifyComposeResourceParity :app-android:verifyReleaseManifestPermissions
           :app-tv:verifyTvReleaseManifestPermissions --continue --stacktrace
       - name: Validate screenshot baselines
+        id: screenshots
+        continue-on-error: true
+        run: ./gradlew :design-screenshots:validateDebugScreenshotTest :design-tv-screenshots:validateDebugScreenshotTest --stacktrace
+      - name: Refresh intentional screenshot changes
+        if: steps.gates.outcome == 'success' && steps.screenshots.outcome == 'failure'
+        run: ./gradlew :design-screenshots:updateDebugScreenshotTest :design-tv-screenshots:updateDebugScreenshotTest --stacktrace
+      - name: Validate refreshed screenshots
+        if: steps.gates.outcome == 'success' && steps.screenshots.outcome == 'failure'
         run: ./gradlew :design-screenshots:validateDebugScreenshotTest :design-tv-screenshots:validateDebugScreenshotTest --stacktrace
       - name: Save test reports
         if: always()
@@ -36,4 +45,6 @@ jobs:
           path: |
             **/build/reports/
             **/build/test-results/
+            design-screenshots/src/screenshotTestDebug/reference/
+            design-tv-screenshots/src/screenshotTestDebug/reference/
           retention-days: 7

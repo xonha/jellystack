@@ -75,7 +75,9 @@ and TMDB IDs are distinct. POSTs are not automatically retried.
 - Approval history omits TMDB IDs and the submitted payload. Jellystack does not
   infer identity from titles, turn a library ID into a request ID, or create fake
   request IDs for direct adds. The submission response can identify its own pending
-  request, but a later history refresh may lose that title association.
+  request. During that server session, refreshes can safely reuse its exact request
+  ID/type association to update status. The association is not guessed or persisted
+  across app restarts.
 - Native details expose Mediarium's acquisition status. A title added in Mediarium
   is shown as processing in the shared request state to prevent duplicate adds.
   Even `downloaded`/`availableAt` does not establish playable Jellyfin availability.

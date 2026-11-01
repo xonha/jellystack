@@ -8,6 +8,7 @@ import dev.jellystack.core.jellyseerr.JellyseerrRecommendationsState
 import dev.jellystack.core.jellyseerr.JellyseerrRequestStatus
 import dev.jellystack.core.jellyseerr.JellyseerrRequestSummary
 import dev.jellystack.core.jellyseerr.JellyseerrSearchItem
+import dev.jellystack.core.jellyseerr.RequestProviderType
 import dev.jellystack.core.preferences.AppLanguage
 import kotlinx.datetime.Instant
 import kotlin.test.Test
@@ -91,7 +92,8 @@ class TvDiscoverRowsTest {
 
     @Test
     fun unidentifiedRequestHistoryShowsStatusWithoutInventingAMediaIdentity() {
-        val discover = buildTvDiscoverRows(readyState(), listOf(request(7, null)), strings) { false }
+        val history = request(7, null).copy(provider = RequestProviderType.MEDIARIUM)
+        val discover = buildTvDiscoverRows(readyState(), listOf(history), strings) { false }
         val card =
             discover.rows
                 .single()
