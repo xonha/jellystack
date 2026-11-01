@@ -5,6 +5,7 @@ import dev.jellystack.core.jellyseerr.JellyseerrRecommendationsState
 import dev.jellystack.core.jellyseerr.JellyseerrRequestStatus
 import dev.jellystack.core.jellyseerr.JellyseerrRequestSummary
 import dev.jellystack.core.jellyseerr.JellyseerrSearchItem
+import dev.jellystack.core.jellyseerr.RequestProviderType
 
 internal const val DISCOVER_REQUESTS_ROW = "discover-requests"
 
@@ -61,7 +62,7 @@ internal fun buildTvDiscoverRows(
                     .collapsedByMedia()
                     .mapNotNull { it.toSearchItem(strings.messages::untitledRequest) }
             val historyCards =
-                requestItems.filter { it.tmdbId == null }.distinctBy { it.id }.map {
+                requestItems.filter { it.tmdbId == null && it.provider == RequestProviderType.MEDIARIUM }.distinctBy { it.id }.map {
                     TvCinematicCard(
                         id = "request-history:${it.id}",
                         title = it.titleOrUntitled(strings.messages::untitledRequest),

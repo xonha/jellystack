@@ -911,8 +911,9 @@ class JellyseerrRequestsCoordinator(
 
     private fun mergeCurrentRequests(requests: List<JellyseerrRequestSummary>) {
         requests.forEach { summary ->
-            summary.mediaKey()?.let { key ->
-                currentRequestsByMedia[key] = summary
+            val resolved = summary.withVerifiedMediaIdentity(currentRequestsByMedia)
+            resolved.mediaKey()?.let { key ->
+                currentRequestsByMedia[key] = resolved
             }
         }
     }

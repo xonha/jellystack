@@ -61,6 +61,7 @@ import jellystack_mobile.design.generated.resources.onboarding_url_error
 import jellystack_mobile.design.generated.resources.password
 import jellystack_mobile.design.generated.resources.password_optional
 import jellystack_mobile.design.generated.resources.quick_connect_description
+import jellystack_mobile.design.generated.resources.request_provider
 import jellystack_mobile.design.generated.resources.seerr_automatic_login
 import jellystack_mobile.design.generated.resources.seerr_connect_jellyfin_first
 import jellystack_mobile.design.generated.resources.server_name
@@ -135,7 +136,7 @@ internal fun AddServerDialog(
                             }
                         },
                         enabled = !isSaving,
-                        label = { Text("Seerr") },
+                        label = { Text(stringResource(Res.string.request_provider)) },
                     )
                 }
                 OutlinedTextField(
