@@ -62,14 +62,17 @@ internal fun buildTvDiscoverRows(
                     .collapsedByMedia()
                     .mapNotNull { it.toSearchItem(strings.messages::untitledRequest) }
             val historyCards =
-                requestItems.filter { it.tmdbId == null && it.provider == RequestProviderType.MEDIARIUM }.distinctBy { it.id }.map {
-                    TvCinematicCard(
-                        id = "request-history:${it.id}",
-                        title = it.titleOrUntitled(strings.messages::untitledRequest),
-                        subtitle = it.requestStatus.label(strings),
-                        artworkUrl = tmdbImageUrl(it.posterPath),
-                    )
-                }
+                requestItems
+                    .filter { it.tmdbId == null && it.provider == RequestProviderType.MEDIARIUM }
+                    .distinctBy { it.id }
+                    .map {
+                        TvCinematicCard(
+                            id = "request-history:${it.id}",
+                            title = it.titleOrUntitled(strings.messages::untitledRequest),
+                            subtitle = it.requestStatus.label(strings),
+                            artworkUrl = tmdbImageUrl(it.posterPath),
+                        )
+                    }
             val requestCards = cardsOf(requested) { "request:${it.cinematicKey()}" } + historyCards
             tvCinematicRowOrNull(DISCOVER_REQUESTS_ROW, strings.requests, requestCards)?.let(::add)
         }

@@ -92,8 +92,8 @@ class TvDiscoverRowsTest {
 
     @Test
     fun unidentifiedRequestHistoryShowsStatusWithoutInventingAMediaIdentity() {
-        val discover =
-            buildTvDiscoverRows(readyState(), listOf(request(7, null).copy(provider = RequestProviderType.MEDIARIUM)), strings) { false }
+        val history = request(7, null).copy(provider = RequestProviderType.MEDIARIUM)
+        val discover = buildTvDiscoverRows(readyState(), listOf(history), strings) { false }
         val card =
             discover.rows
                 .single()
