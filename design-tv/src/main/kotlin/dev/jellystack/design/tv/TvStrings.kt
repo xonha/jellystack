@@ -3,10 +3,6 @@ package dev.jellystack.design.tv
 import dev.jellystack.core.preferences.AppLanguage
 import java.util.Locale
 
-/**
- * Duration, rating, and playback statistics labels. New strings go into small groups like this one:
- * the flat [TvStrings] constructor is at the JVM limit of 255 parameter slots (docs/tech-debt.md 3.7).
- */
 internal data class TvRequestProviderStrings(
     val apiKey: String,
     val connect: String,
@@ -21,6 +17,10 @@ internal data class TvRequestProviderStrings(
     }
 }
 
+/**
+ * Duration, rating, and playback statistics labels. New strings go into small groups like this one:
+ * the flat [TvStrings] constructor is at the JVM limit of 255 parameter slots (docs/tech-debt.md 3.7).
+ */
 internal data class TvMetadataStrings(
     val minutesLeft: String,
     val minutesShort: String,

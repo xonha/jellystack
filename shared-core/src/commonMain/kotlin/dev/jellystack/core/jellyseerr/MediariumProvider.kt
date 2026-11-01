@@ -214,6 +214,5 @@ private fun JellyseerrRequestSummary.matches(filter: JellyseerrRequestFilter): B
         JellyseerrRequestFilter.ALL -> true
         JellyseerrRequestFilter.PENDING -> requestStatus == JellyseerrRequestStatus.PENDING
         JellyseerrRequestFilter.APPROVED -> requestStatus == JellyseerrRequestStatus.APPROVED
-        JellyseerrRequestFilter.UNAVAILABLE -> requestStatus != JellyseerrRequestStatus.DECLINED
         else -> false // The native history does not identify a playable Jellyfin item.
     }

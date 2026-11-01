@@ -125,10 +125,6 @@ class ServerRepository(
                     }
                     refreshServers()
                     ensureActiveSelection(request.type)
-                    if (request.type.isRequestProvider) {
-                        activeServerPreferences.setActiveServerId(request.type, record.id)
-                        activeServerPreferences.selectRequestProvider(request.type)
-                    }
                     record.toManagedServer()
                 }
             }
