@@ -16,12 +16,16 @@ jobs:
           distribution: temurin
           java-version: 17
       - uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a
+        with:
+          cache-read-only: false
       - name: Static checks, unit tests, phone and TV builds
         run: >-
           ./gradlew spotlessCheck detekt
           :shared-network:jvmTest :shared-core:testDebugUnitTest
           :design:testDebugUnitTest :design-tv:testDebugUnitTest
-          :app-android:assembleDebug :app-tv:assembleDebug --stacktrace
+          :app-android:assembleDebug :app-tv:assembleDebug
+          :design:verifyComposeResourceParity :app-android:verifyReleaseManifestPermissions
+          :app-tv:verifyTvReleaseManifestPermissions --continue --stacktrace
       - name: Validate screenshot baselines
         run: ./gradlew :design-screenshots:validateDebugScreenshotTest :design-tv-screenshots:validateDebugScreenshotTest --stacktrace
       - name: Save test reports

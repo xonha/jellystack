@@ -2040,6 +2040,18 @@ fun JellystackRoot(
                                     settingsConnectionHealth +
                                     (connectedServer.id to SettingsConnectionHealth.Ready)
                             }
+                            connectedServerId?.let { id ->
+                                serverRepository.setActiveServer(
+                                    if (form.requestProvider ==
+                                        RequestProviderType.MEDIARIUM
+                                    ) {
+                                        ServerType.MEDIARIUM
+                                    } else {
+                                        ServerType.JELLYSEERR
+                                    },
+                                    id,
+                                )
+                            }
                             jellyseerrCoordinator.refresh()
                             recommendationsCoordinator.refreshAll()
                             showQuickConnectSeerrExplanation = false

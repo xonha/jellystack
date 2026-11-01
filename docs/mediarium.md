@@ -70,6 +70,8 @@ and TMDB IDs are distinct. POSTs are not automatically retried.
 - Trending/popular and native title search are finite, non-paginated arrays. A later
   search page returns no extra entries. Upcoming rails and optional ratings/similar/
   recommendation enrichment are not implemented for Mediarium.
+- Approval-history filters support All, Pending and Approved. Acquisition-state
+  filters cannot be inferred from the native history response and yield no matches.
 - Approval history omits TMDB IDs and the submitted payload. Jellystack does not
   infer identity from titles, turn a library ID into a request ID, or create fake
   request IDs for direct adds. The submission response can identify its own pending
