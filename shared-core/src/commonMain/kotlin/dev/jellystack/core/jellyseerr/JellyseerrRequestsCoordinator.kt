@@ -349,6 +349,24 @@ class JellyseerrRequestsCoordinator(
                     }
                     refreshInternal(fetchCounts = true)
                 }
+                JellyseerrCreateResult.AddedToProvider -> {
+                    mutex.withLock {
+                        pendingSubmitKeys.remove(submitKey)
+                        updateReadyState {
+                            it.copy(
+                                isPerformingAction = hasPendingActions(),
+                                message =
+                                    nextMessage(
+                                        kind = JellyseerrMessageKind.INFO,
+                                        code = JellyseerrMessageCode.RequestSubmitted,
+                                        subject = item.title,
+                                        operationKey = operationKey,
+                                    ),
+                            )
+                        }
+                    }
+                    refreshInternal(fetchCounts = true)
+                }
                 is JellyseerrCreateResult.Duplicate -> {
                     mutex.withLock {
                         pendingSubmitKeys.remove(submitKey)

@@ -7,6 +7,20 @@ import java.util.Locale
  * Duration, rating, and playback statistics labels. New strings go into small groups like this one:
  * the flat [TvStrings] constructor is at the JVM limit of 255 parameter slots (docs/tech-debt.md 3.7).
  */
+internal data class TvRequestProviderStrings(
+    val apiKey: String,
+    val connect: String,
+) {
+    companion object {
+        fun forLocale(locale: Locale): TvRequestProviderStrings =
+            if (locale.language == "de") {
+                TvRequestProviderStrings("Mediarium-API-Schlüssel", "Anfrageanbieter verbinden")
+            } else {
+                TvRequestProviderStrings("Mediarium API key", "Connect request provider")
+            }
+    }
+}
+
 internal data class TvMetadataStrings(
     val minutesLeft: String,
     val minutesShort: String,
@@ -384,6 +398,9 @@ internal data class TvStrings(
     val locale: Locale
         get() = messages.locale
 
+    val requestProvider: TvRequestProviderStrings
+        get() = TvRequestProviderStrings.forLocale(locale)
+
     fun itemCount(count: Long): String = "$count ${if (count == 1L) itemSingular else itemPlural}"
 
     companion object {
@@ -468,7 +485,7 @@ internal data class TvStrings(
                 discoverLoadFailed = "Discover could not be loaded.",
                 searchHint = "Search Jellyfin and Seerr",
                 all = "All",
-                connectSeerrPrompt = "Connect Seerr in Settings to discover and request media.",
+                connectSeerrPrompt = "Connect Seerr or Mediarium in Settings to discover and request media.",
                 requests = "Requests",
                 cannotRequest = "Your Seerr account cannot request this media type.",
                 request = "Request",
@@ -755,7 +772,8 @@ internal data class TvStrings(
                 discoverLoadFailed = "Entdecken konnte nicht geladen werden.",
                 searchHint = "Jellyfin und Seerr durchsuchen",
                 all = "Alle",
-                connectSeerrPrompt = "Verbinde Seerr in den Einstellungen, um Medien zu entdecken und anzufragen.",
+                connectSeerrPrompt =
+                    "Verbinde Seerr oder Mediarium in den Einstellungen, um Medien zu entdecken und anzufragen.",
                 requests = "Anfragen",
                 cannotRequest = "Dein Seerr-Konto darf diesen Medientyp nicht anfragen.",
                 request = "Anfragen",

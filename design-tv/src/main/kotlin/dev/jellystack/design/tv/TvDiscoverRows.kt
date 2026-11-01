@@ -13,7 +13,7 @@ internal class TvDiscoverRows(
     val rows: List<TvCinematicRow>,
     private val itemsByCardId: Map<String, JellyseerrSearchItem>,
 ) {
-    val cardIds: Set<String> get() = itemsByCardId.keys
+    val cardIds: Set<String> get() = rows.flatMap { row -> row.cards.map { it.id } }.toSet()
 
     fun item(cardId: String): JellyseerrSearchItem? = itemsByCardId[cardId]
 
@@ -60,7 +60,16 @@ internal fun buildTvDiscoverRows(
                 requestItems
                     .collapsedByMedia()
                     .mapNotNull { it.toSearchItem(strings.messages::untitledRequest) }
-            val requestCards = cardsOf(requested) { "request:${it.cinematicKey()}" }
+            val historyCards =
+                requestItems.filter { it.tmdbId == null }.distinctBy { it.id }.map {
+                    TvCinematicCard(
+                        id = "request-history:${it.id}",
+                        title = it.titleOrUntitled(strings.messages::untitledRequest),
+                        subtitle = it.requestStatus.label(strings),
+                        artworkUrl = tmdbImageUrl(it.posterPath),
+                    )
+                }
+            val requestCards = cardsOf(requested) { "request:${it.cinematicKey()}" } + historyCards
             tvCinematicRowOrNull(DISCOVER_REQUESTS_ROW, strings.requests, requestCards)?.let(::add)
         }
     return TvDiscoverRows(rows, itemsByCardId)

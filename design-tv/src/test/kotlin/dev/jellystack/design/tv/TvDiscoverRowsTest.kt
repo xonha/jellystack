@@ -82,11 +82,25 @@ class TvDiscoverRowsTest {
                 listOf(request(id = 1, tmdbId = 2)),
                 strings,
             ) { false }
-        val empty = buildTvDiscoverRows(readyState(), listOf(request(id = 2, tmdbId = null)), strings) { false }
+        val empty = buildTvDiscoverRows(readyState(), emptyList(), strings) { false }
 
         assertEquals(tvCinematicFocusTargetId("discover-popular_movies", "movie:1"), populated.initialTargetId)
         assertNull(empty.initialTargetId)
         assertNotNull(populated.item("movie:1"))
+    }
+
+    @Test
+    fun unidentifiedRequestHistoryShowsStatusWithoutInventingAMediaIdentity() {
+        val discover = buildTvDiscoverRows(readyState(), listOf(request(7, null)), strings) { false }
+        val card =
+            discover.rows
+                .single()
+                .cards
+                .single()
+        assertEquals("request-history:7", card.id)
+        assertEquals(JellyseerrRequestStatus.APPROVED.label(strings), card.subtitle)
+        assertNull(discover.item(card.id))
+        assertEquals(tvCinematicFocusTargetId(DISCOVER_REQUESTS_ROW, card.id), discover.initialTargetId)
     }
 
     private fun readyState(vararg rails: Pair<JellyseerrRecommendationRail, List<JellyseerrSearchItem>>) =

@@ -30,3 +30,7 @@ complexity:
   LongParameterList:
     functionThreshold: 6
     constructorThreshold: 6
+
+naming:
+  FunctionNaming:
+    ignoreAnnotated: ["Composable"]
