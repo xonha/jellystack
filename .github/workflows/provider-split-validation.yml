@@ -1,0 +1,45 @@
+name: Request provider validation
+on:
+  push:
+    branches: [validation/refactor-provider, validation/mediarium-split]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a
+      - name: Static checks
+        run: ./gradlew spotlessCheck detekt --stacktrace
+      - name: Unit tests, resource and manifest checks, builds
+        run: >-
+          ./gradlew verifyUniqueAndroidVersionCodes
+          :design:verifyComposeResourceParity
+          :app-android:verifyAndroidResourceParity
+          :app-android:verifyReleaseManifestPermissions
+          :app-tv:verifyTvReleaseManifestPermissions
+          :shared-network:jvmTest :shared-core:testDebugUnitTest
+          :shared-database:testDebugUnitTest :players:testDebugUnitTest
+          :design:testDebugUnitTest :design-tv:testDebugUnitTest
+          :app-android:testDebugUnitTest :app-tv:testDebugUnitTest
+          :app-tv:lintDebug :app-android:assembleDebug :app-tv:assembleDebug --continue --stacktrace
+      - name: Screenshot validation
+        run: ./gradlew :design-screenshots:validateDebugScreenshotTest :design-tv-screenshots:validateDebugScreenshotTest --stacktrace
+      - name: Save reports and test APKs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: provider-validation-${{ github.sha }}
+          path: |
+            **/build/reports/
+            **/build/test-results/
+            app-android/build/outputs/apk/debug/*.apk
+            app-tv/build/outputs/apk/debug/*.apk
+          retention-days: 14
